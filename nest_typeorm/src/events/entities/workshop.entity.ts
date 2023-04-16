@@ -6,10 +6,10 @@ export class Workshop {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'datetime' })
+  @Column()
   start: string;
 
-  @Column({ type: 'datetime' })
+  @Column()
   end: string;
 
   @Column({ type: 'integer', default: null })
@@ -22,5 +22,5 @@ export class Workshop {
   name: string;
 
   @Column({ type: 'datetime' })
-  createdAt: string;
+  createdAt: Date;
 }
