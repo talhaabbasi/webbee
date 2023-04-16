@@ -93,11 +93,7 @@ export class EventsService {
 
   @Get('events')
   async getEventsWithWorkshops() {
-    return this.eventRepository
-      .createQueryBuilder('event')
-      .leftJoinAndSelect('event.workshops', 'workshop')
-      .where('workshop.start > :now', { now: new Date() })
-      .getMany();
+    return this.eventRepository.find({ relations: ['workshops'] });
   }
 
   /* TODO: complete getFutureEventWithWorkshops so that it returns events with workshops, that have not yet started
@@ -168,6 +164,10 @@ export class EventsService {
      */
   @Get('futureevents')
   async getFutureEventWithWorkshops() {
-    throw new Error('TODO task 2');
+    return this.eventRepository
+      .createQueryBuilder('event')
+      .leftJoinAndSelect('event.workshops', 'workshop')
+      .where('workshop.start > :now', { now: new Date() })
+      .getMany();
   }
 }
