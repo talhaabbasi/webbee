@@ -11,7 +11,7 @@ export class EventsService {
   ) {}
 
   getWarmupEvents() {
-    return this.eventRepository.find();
+    return this.eventRepository.find({ relations: ['workshops'] });
   }
 
   /* TODO: complete getEventsWithWorkshops so that it returns all events including the workshops
