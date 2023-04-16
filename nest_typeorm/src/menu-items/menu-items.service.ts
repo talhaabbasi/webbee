@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MenuItem } from './entities/menu-item.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { IMenuItem } from './entities/menu-item.interface';
 
 @Injectable()
 export class MenuItemsService {
@@ -86,6 +87,30 @@ export class MenuItemsService {
     ]
   */
   async getMenuItems() {
-    throw new Error('TODO in task 3');
+    const items = await this.menuItemRepository.find();
+    const menu: IMenuItem[] = [];
+    const lookup: Record<number, IMenuItem> = {};
+
+    items.forEach((item) => {
+      const menuItem: IMenuItem = {
+        ...item,
+        children: [],
+      };
+      lookup[item.id] = menuItem;
+      if (item.parentId === null) {
+        menu.push(menuItem);
+      } else {
+        const parent = lookup[item.parentId];
+        if (parent) {
+          parent.children.push(menuItem);
+        } else {
+          throw new Error(
+            `Menu item ${item.id} has invalid parent ${item.parentId}`,
+          );
+        }
+      }
+    });
+
+    return menu;
   }
 }
